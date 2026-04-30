@@ -25,11 +25,11 @@ While Image-Flex allows you to indicate a region to use other than `us-east-1`, 
 Note that this is a production-ready application, not a tutorial. This document assumes you have some working knowledge of AWS, [CloudFormation](https://aws.amazon.com/cloudformation/) and the [Serverless Application Model (SAM)](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html), [AWS Lambda](https://aws.amazon.com/lambda/), [S3](https://aws.amazon.com/s3/), [Node.js](https://nodejs.org/), [NPM](https://www.npmjs.com/), and JavaScript.
 
 ## Requirements
-1. [Node.js v20.x](https://nodejs.org/en/blog/release/v20.0.0/). It's recommended to use [Node Version Manager](https://github.com/nvm-sh/nvm), which allows one system to install and switch between multiple Node.js versions.
+1. [Node.js v24.x](https://nodejs.org/) (LTS). It's recommended to use [Node Version Manager](https://github.com/nvm-sh/nvm), which allows one system to install and switch between multiple Node.js versions. This repository includes a `.nvmrc` file set to `24`.
 1. An [AWS account](https://aws.amazon.com/account/sign-up).
 1. The [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-macos.html).
-1. The [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-mac.html).
-1. [Docker](https://www.docker.com/) for SAM packaging.
+1. The [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-mac.html). Use a recent release (for example **1.150+**) so `nodejs24.x` and container builds are supported; upgrade if `sam build` reports that the runtime is not supported.
+1. [Docker](https://www.docker.com/) (or Finch) running locally — required because `npm run build` runs `sam build --use-container`, which matches the Lambda Linux environment (needed for native modules such as **sharp**).
 
 Be sure to configure the AWS CLI:
 ```bash
@@ -176,7 +176,7 @@ These are generally only called directly when debugging.
 ```bash
 $ npm run build
 ```
-Installs and builds the dependencies for the ***GetOrCreateImage*** Lambda function using a Docker container built on the lambci/lambda:build-nodejs12.x Docker container image.
+Installs and builds the Lambda functions using the AWS SAM CLI (`sam build --use-container`), which uses a container image aligned with the Node.js runtime declared in `template.yaml` (currently Node.js 24).
 
 ### 4. Package
 ```bash
